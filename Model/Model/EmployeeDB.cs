@@ -9,6 +9,25 @@ namespace Model.Model
     [Table("Employees")]
     public class EmployeeDB
     {
+        public EmployeeDB(int id, float salary)
+        {
+            ID = id;
+            Salary = salary;
+        }
+
+        public EmployeeDB(int id, string name, float salary, bool status)
+        {
+            ID = id;
+            Name = name;
+            Salary = salary;
+            Status = status;
+        }
+
+        public EmployeeDB( )
+        {
+            
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }

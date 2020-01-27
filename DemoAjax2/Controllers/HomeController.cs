@@ -20,79 +20,6 @@ namespace DemoAjax2.Controllers
             this.employee = employee;
         }
 
-        List<EmployeeModel> listEmployee = new List<EmployeeModel>() {
-            new EmployeeModel()
-            {
-                ID = 1,
-                Name = "Nguyen Van A",
-                Salary = 20000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 2,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 3,
-                Name = "Nguyen Van C",
-                Salary = 40000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 4,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 5,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 6,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 7,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 8,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 9,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            },
-            new EmployeeModel()
-            {
-                ID = 10,
-                Name = "Nguyen Van B",
-                Salary = 30000,
-                Status = true
-            }
-        };
-
         public IActionResult Index()
         {
             return View();
@@ -100,10 +27,8 @@ namespace DemoAjax2.Controllers
         [HttpGet]
         public JsonResult LoadData(int page, int pageSize = 3)
         {
-            //int totalRow = listEmployee.Count();
+          
             int totalRow = employee.GetAll().Count();
-
-            //var model = listEmployee.Skip((page - 1) * pageSize).Take(pageSize);
 
             var model = employee.GetAll().Skip((page - 1) * pageSize).Take(pageSize);
             return Json(new
@@ -114,13 +39,62 @@ namespace DemoAjax2.Controllers
             });
         }
 
+        [HttpGet]
+        public JsonResult GetDetail(int id)
+        {
+            var model = employee.Get(id);
+
+            return Json(new
+            {
+                data = model,
+                status = true
+            });
+        }
+
+        [HttpGet]
+        public JsonResult Delete(int id)
+        {
+             employee.Delete(id);
+
+            return Json(new
+            {
+              
+                status = true
+            });
+        }
+
         [HttpPost]
-        public JsonResult Update(int ID, double Salary)
+        public JsonResult SaveData(string Name, float Salary, bool Status, int ID)
+        {
+            EmployeeDB emp = new EmployeeDB(ID,Name, Salary, Status) ;
+            bool status = false;
+            if(ID == 0)
+            {
+                emp.CreatedDate = DateTime.Now;
+                employee.Add(emp);
+              
+                status = true;
+            }
+            else
+            {
+                //var entity = employee.Get(emp.ID);
+                employee.Update(emp);
+                status = true;
+            }
+
+            return Json(new
+            {
+                status 
+            });
+        }
+
+        [HttpPost]
+        public JsonResult Update(int ID, float Salary)
         {
             int id = ID;
-            double salary = Salary;
-            var entity = listEmployee.Find(x => x.ID == id);
-            entity.Salary = salary;
+            float salary = Salary;
+            var entity = employee.Get(id);
+            employee.Update( new EmployeeDB(id,salary));
 
             return Json(new
             {

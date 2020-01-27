@@ -10,7 +10,7 @@ namespace Model.IRepository
         IEnumerable<EmployeeDB> GetAll();
         EmployeeDB Get(long id);
         void Add(EmployeeDB entity);
-        void Update(EmployeeDB employee, EmployeeDB entity);
-        void Delete(EmployeeDB employee);
+        void Update(EmployeeDB employee);
+        void Delete(int id);
     }
 }

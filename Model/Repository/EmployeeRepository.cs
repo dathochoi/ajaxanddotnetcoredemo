@@ -19,11 +19,14 @@ namespace Model.Repository
         public void Add(EmployeeDB entity)
         {
              _context.Employees.Add(entity);
+            _context.SaveChanges();
         }
 
-        public void Delete(EmployeeDB employee)
+        public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var emp = _context.Employees.Find(id);
+            _context.Employees.Remove(emp);
+            _context.SaveChanges();
         }
 
         public EmployeeDB Get(long id)
@@ -36,12 +39,20 @@ namespace Model.Repository
            return _context.Employees.ToList();
         }
 
-        public void Update(EmployeeDB employee, EmployeeDB entity)
+        public void Update(EmployeeDB employee)
         {
-            employee.Name = entity.Name;
-            employee.Salary = entity.Salary;
-            employee.Status = entity.Status;
-            _context.SaveChanges();
+            var emp = _context.Employees.Find(employee.ID);
+            if (emp != null){
+
+                emp.Name = employee.Name;
+                emp.Salary = employee.Salary;
+                emp.Status = employee.Status;
+               // _context.Update(emp);
+                _context.SaveChanges();
+            }
+        
+           
+          //  _context.SaveChanges();
         }
     }
 }

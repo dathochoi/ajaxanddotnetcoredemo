@@ -1,5 +1,5 @@
 ﻿var homeconfig = {
-    pageSize: 3,
+    pageSize: 5,
     pageIndex: 1,
 }
 
@@ -17,8 +17,121 @@ var homeController = {
                 var value = $(this).val();
                 homeController.updateSalary(id, value);
             }
+        });
+        $('#btnAddNew').off('click').on('click', function () {
+            $('#modalAddUpdate').modal('show');
+            homeController.resetForm();
+        });
+        $('#btnSave').off('click').on('click', function () {
+            homeController.saveData();
+        });
+
+        $('.btn-edit').off('click').on('click', function () {
+            $('#modalAddUpdate').modal('show');
+            var id = $(this).data('id');
+            homeController.loadDetail(id);
+        });
+        $('.btn-delete').off('click').on('click', function () {  
+            var id = $(this).data('id');
+            homeController.delete(id);
+        });
+    },
+    delete: function (id) {
+       
+        $.ajax({
+            url: '/Home/Delete',
+            data: {
+                id: id
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                if (res.status == true) {
+                    alert("Removed")
+                    homeController.loadData();
+                }
+                else {
+                    alert("Error")
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+            
+    },
+    loadDetail: function (id) {
+        $.ajax({
+            url: '/Home/GetDetail',
+            data: { 
+                id: id
+            },
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                if (res.status == true) {
+                    var data = res.data;
+                    $('#hidID').val(data.ID);
+                    $('#txtName').val(data.Name);
+                    $('#txtSalary').val(data.Salary);
+                    $('#ckStatus').prop('checked', data.Status);
+
+                }
+                else {
+                    alert(res.mess);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+
         })
     },
+    resetForm: function () {
+        $('#hidID').val('0');
+        $('#txtName').val('');
+        $('#txtSalary').val(0);
+        $('#ckStatus').prop('checked',true);
+    },
+
+    saveData: function () {
+        var name = $('#txtName').val();
+        var salary = parseFloat($('#txtSalary').val());
+        var status = $('#ckStatus').prop('checked');
+        var id = parseInt($('#hidID').val());
+
+        $.ajax({
+            url: '/Home/SaveData',
+            data: {
+               
+                    Name: name,
+                    Salary: salary,
+                    Status: status,
+                    ID: id
+                    
+            },
+            type: 'POST',
+            dataType: 'json',
+            success: function (res) {
+                if (status == true) {
+                    alert('Save success');
+                    $('#modalAddUpdate').modal('hide');
+                   
+                        homeController.loadData();
+                 
+                }
+                else {
+                    alert(res.mess);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+
+        })
+
+
+     },
     updateSalary: function (id, value) {
         var data = {
             ID: id,
