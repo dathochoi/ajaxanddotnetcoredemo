@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section scripts{
+    <script src="~/lib/mustache.js/mustache.min.js"></script>
+    <script src="~/lib/twbs-pagination/jquery.twbsPagination.min.js"></script>
+
+    <script src="~/js/HomeController.js"></script>
+}
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Name</td>
+                <td>Salary</td>
+                <td>Status</td>
+            </tr>
+        </thead>
+        <tbody id="tblData"></tbody>
+    </table>
+
+    <div id="pagination" class="pagination">
+    </div>
+
+
+</div>
+<script id="data-template" type="x-tmpl-mustache">
+    <tr>
+        <td>{{ID}}</td>
+        <td>{{Name}}</td>
+        <td><input type="number" class="txtSalary" data-id="{{ID}}" value="{{Salary}}" /></td>
+        <td>{{{Status}}}</td>
+    </tr>
+</script>

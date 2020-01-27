@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "twbs-pagination@1.4.2",
+      "destination": "wwwroot/lib/twbs-pagination/"
+    },
+    {
+      "library": "mustache.js@3.1.0",
+      "destination": "wwwroot/lib/mustache.js/"
+    }
+  ]
+}
